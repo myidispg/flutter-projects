@@ -25,7 +25,8 @@ void main() {
           false, // To remove the debug banner on top right
       home: Scaffold(
         appBar: AppBar(
-          title: Text('Hello Rectangle'),
+          title: Text('Hello Rectangle!'),
+          backgroundColor: new Color(0xFF673AB7), // Change app bar color
         ),
         body: HelloRectangle(),
       ),
