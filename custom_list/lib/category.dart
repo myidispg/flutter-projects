@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 
 final _rowHeight = 100.0;
 final _borderRadius = new BorderRadius.all(new Radius.circular(_rowHeight/2));
+
 class Category extends StatelessWidget {
   /// Creates a [Category].
   ///
