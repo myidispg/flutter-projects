@@ -28,14 +28,24 @@ class Products extends StatelessWidget {
     );
   }
 
+  Widget _buildProductList(){
+    Widget productCardList = Center(
+        child: Text('Whoops, we do not have a product to display now.'
+            ' Click on the button ^^ to add some.'));
+    if (_products.length > 0) {
+      productCardList = ListView.builder(
+        // A ListView can't be beneath another widget.
+        // ^^ Fixed by putting in an expanded widget in product_manager.dart
+
+        itemBuilder: _buildProduct,
+        itemCount: _products.length,
+      );
+    }
+    return productCardList;
+  }
+
   @override
   Widget build(BuildContext context) {
-    return _products.length > 0 ? ListView.builder(
-      // A ListView can't be beneath another widget.
-      // ^^ Fixed by putting in an expanded widget in product_manager.dart
-
-      itemBuilder: _buildProduct,
-      itemCount: _products.length,
-    ) : Center(child: Text('Whoops, we do not have a product to display now. Click on the button ^^ to add some.'));
+    return _buildProductList();
   }
 }
