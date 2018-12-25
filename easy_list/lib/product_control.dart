@@ -11,6 +11,7 @@ class ProductControl extends StatelessWidget {
       color: Theme.of(context).primaryColor,
       onPressed: () {
         addProduct('Sweets');
+        Scaffold.of(context).showSnackBar(new SnackBar(content: new Text("Added a new product")));
       },
       child: Text(
         'Add product',

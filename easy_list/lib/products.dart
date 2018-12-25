@@ -13,9 +13,10 @@ class Products extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Column(
+    return ListView( // A ListView can't be beneath another widget.
       children:
           _products // Below function is to create a list with multiple product cards.
+          // ^^ Fixed by putting in an expanded widget in product_manager.dart
               .map((element) => Card(
                     child: Container(
                       margin: EdgeInsets.only(top: 10.0, left: 10.0, right: 10.0),

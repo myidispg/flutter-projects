@@ -7,7 +7,7 @@ class ProductManager extends StatefulWidget {
 
   final String startingProduct;
 
-  ProductManager({this.startingProduct='Sweets Tester'});
+  ProductManager({this.startingProduct='Sweets Tester'}); // Default argument.
 
   @override
   State<StatefulWidget> createState() {
@@ -40,7 +40,7 @@ class _ProductManagerState extends State<ProductManager> {
         margin: EdgeInsets.all(10.0),
         child: ProductControl(_addProduct)
       ),
-      Products(_products)
+      Expanded(child: Products(_products)) // Expanded takes all the
     ]);
   }
 }
