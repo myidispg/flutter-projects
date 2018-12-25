@@ -7,7 +7,7 @@ class ProductManager extends StatefulWidget {
 
   final String startingProduct;
 
-  ProductManager({this.startingProduct='Sweets Tester'}); // Default argument.
+  ProductManager({this.startingProduct}); // Default argument.
 
   @override
   State<StatefulWidget> createState() {
@@ -21,7 +21,9 @@ class _ProductManagerState extends State<ProductManager> {
   // Method to call when this ProductManager is called for the first time. Subsequent state changes are ignored.
   @override
   void initState() {
-    _products.add(widget.startingProduct);
+    if(widget.startingProduct != null) {
+      _products.add(widget.startingProduct);
+    }
     super.initState();
   }
 

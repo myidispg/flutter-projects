@@ -30,12 +30,12 @@ class Products extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ListView.builder(
+    return _products.length > 0 ? ListView.builder(
       // A ListView can't be beneath another widget.
       // ^^ Fixed by putting in an expanded widget in product_manager.dart
 
       itemBuilder: _buildProduct,
       itemCount: _products.length,
-    );
+    ) : Center(child: Text('Whoops, we do not have a product to display now. Click on the button ^^ to add some.'));
   }
 }
