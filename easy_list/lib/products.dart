@@ -11,27 +11,31 @@ class Products extends StatelessWidget {
 
   Products([this._products = const []]);
 
+  Widget _buildProduct(BuildContext context, int index) {
+    return Card(
+      child: Container(
+        margin: EdgeInsets.only(top: 10.0, left: 10.0, right: 10.0),
+        padding: EdgeInsets.all(10.0),
+        child: Column(
+          children: <Widget>[
+            Image.asset('assets/food.jpg'),
+            Container(
+                margin: EdgeInsets.only(top: 5.0),
+                child: Text(_products[index]))
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
-    return ListView( // A ListView can't be beneath another widget.
-      children:
-          _products // Below function is to create a list with multiple product cards.
-          // ^^ Fixed by putting in an expanded widget in product_manager.dart
-              .map((element) => Card(
-                    child: Container(
-                      margin: EdgeInsets.only(top: 10.0, left: 10.0, right: 10.0),
-                      padding: EdgeInsets.all(10.0),
-                      child: Column(
-                        children: <Widget>[
-                          Image.asset('assets/food.jpg'),
-                          Container(
-                              margin: EdgeInsets.only(top: 5.0),
-                              child: Text(element))
-                        ],
-                      ),
-                    ),
-                  ))
-              .toList(),
+    return ListView.builder(
+      // A ListView can't be beneath another widget.
+      // ^^ Fixed by putting in an expanded widget in product_manager.dart
+
+      itemBuilder: _buildProduct,
+      itemCount: _products.length,
     );
   }
 }
