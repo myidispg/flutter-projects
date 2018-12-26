@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'dart:async';
 
 class ProductPage extends StatelessWidget {
   final String title;
@@ -8,7 +9,16 @@ class ProductPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(// added in Section Navigation,c Video 8
+    return WillPopScope(
+      // added in Section Navigation, Video 8
+      // WillPopScope blocks the back button. Now, to make sure the back buttons work, use Navigator.pop().
+      // This also allows us to pass the future bool value.
+      onWillPop: () {
+        print('Back button pressed');
+        Navigator.pop(context, false);
+        return Future.value(false); // true means allowed to leave.
+        // A false will also work in this case because we have the navigator. But, without the navigator, back buttons won't work.
+      },
       child: Scaffold(
         appBar: AppBar(
           title: Text(this.title),
