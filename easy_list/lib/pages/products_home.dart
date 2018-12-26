@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import 'package:easy_list/product_manager.dart';
+import 'products_admin.dart';
 
 class ProductsPage extends StatelessWidget {
   @override
@@ -10,8 +11,21 @@ class ProductsPage extends StatelessWidget {
       drawer: Drawer(
         child: Column(
           children: <Widget>[
-            AppBar(title: Text('Choose a page.'),),
-            ListTile(),
+            AppBar(
+              automaticallyImplyLeading:
+                  false, // Disable hamburger icon in Drawer.
+              title: Text('Choose a page.'),
+            ),
+            ListTile(
+              title: Text('Manage Products'),
+              onTap: () {
+                Navigator.push(
+                    context,
+                    MaterialPageRoute(
+                        builder: (BuildContext context) =>
+                            ManageProductPage()));
+              },
+            ),
           ],
         ),
       ),
