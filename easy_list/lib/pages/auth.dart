@@ -12,11 +12,10 @@ class AuthPage extends StatelessWidget {
       body: Center(
         child: RaisedButton(
           onPressed: () {
-            Navigator.pushReplacement(
+            Navigator.pushReplacementNamed(
                 // Push replacement means that once navigated to the next page, the previous page will be removed from stack.
                 context,
-                MaterialPageRoute(
-                    builder: (BuildContext context) => ProductsPage()));
+                '/');
           },
           child: Text('Login'),
         ),

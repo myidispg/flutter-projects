@@ -30,15 +30,12 @@ class Products extends StatelessWidget {
               children: <Widget>[
                 FlatButton(
                   child: Text('Details'),
-                  onPressed: () => Navigator.push<bool>( // bool from product.dart suggests that a the delete button was clicked.
-                        context,
-                        MaterialPageRoute(
-                          builder: (BuildContext context) => ProductPage(
-                              _products[index]['title'],
-                              _products[index]['image']),
-                        ),
-                      ).then((bool value) { // Then is a function which is executed when the bool value is received.
-                        if(value){
+                  onPressed: () => Navigator.pushNamed<bool>(
+                        // bool from product.dart suggests that a the delete button was clicked.
+                        context, '/product/' + index.toString(),
+                      ).then((bool value) {
+                        // Then is a function which is executed when the bool value is received.
+                        if (value) {
                           deleteProduct(index);
                         }
                       }),
