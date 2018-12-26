@@ -7,6 +7,32 @@ class ProductPage extends StatelessWidget {
 
   ProductPage(this.title, this.imageUrl);
 
+  _showWarningDialog(BuildContext context) {
+    return showDialog(
+        context: context,
+        builder: (BuildContext context) {
+          return AlertDialog(
+            title: Text('Are you sure?'),
+            content: Text('THis action cannot be undone'),
+            actions: <Widget>[
+              FlatButton(
+                child: Text('DELETE'),
+                onPressed: () {
+                  Navigator.pop(context); // close the dialog.
+                },
+              ),
+              FlatButton(
+                child: Text('CONTINUE'),
+                onPressed: () {
+                  Navigator.pop(context); // Close the dialog
+                  Navigator.pop(context, true); // Delete the item.
+                },
+              )
+            ],
+          );
+        });
+  }
+
   @override
   Widget build(BuildContext context) {
     return WillPopScope(
@@ -39,8 +65,9 @@ class ProductPage extends StatelessWidget {
                   'DELETE!',
                   style: TextStyle(color: Colors.white),
                 ),
-                onPressed: () => Navigator.pop(context,
-                    true), // true is an indicator that page is to be deleted.
+                onPressed: () {
+                  _showWarningDialog(context);
+                }, // true is an indicator that page is to be deleted.
                 // ^^ This true is used in MaterialPageRoute in products.dart
               ),
             ),
