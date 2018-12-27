@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 
-import './pages/product.dart';
-
 /*
 We extend Stateless Widget here because the product list is without state.
 The actual state change is happening in products_manager.dart file which adds elements to the list.
@@ -9,42 +7,54 @@ The updated list is passed here.
 So, we can get by with Stateless widget here.
  */
 class Products extends StatelessWidget {
-  final List<Map<String, String>> _products;
-  final Function deleteProduct;
+  final List<Map<String, dynamic>> _products;
 
-  Products(this._products, {this.deleteProduct});
+  Products(this._products);
 
   Widget _buildProduct(BuildContext context, int index) {
     return Card(
-      child: Container(
-        margin: EdgeInsets.only(top: 10.0, left: 10.0, right: 10.0),
-//        padding: EdgeInsets.all(10.0),
-        child: Column(
-          children: <Widget>[
-            Image.asset(_products[index]['image']),
-            Container(
-                margin: EdgeInsets.only(top: 15.0),
-                child: Text(_products[index]['title'])),
-            ButtonBar(
-              alignment: MainAxisAlignment.center,
+      child: Column(children: <Widget>[
+        Image.asset(_products[index]['image']),
+        Container(
+            padding: EdgeInsets.only(top: 10.0),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
               children: <Widget>[
-                FlatButton(
-                  child: Text('Details'),
-                  onPressed: () => Navigator.pushNamed<bool>(
-                        // bool from product.dart suggests that a the delete button was clicked.
-                        context, '/product/' + index.toString(),
-                      ).then((bool value) {
-                        // Then is a function which is executed when the bool value is received.
-                        if (value) {
-                          deleteProduct(index);
-                        }
-                      }),
-                )
+                Text(_products[index]['title'],
+                    style: TextStyle(
+                        fontSize: 26.0,
+                        fontWeight: FontWeight.bold,
+                        fontFamily: 'Oswald')),
+                SizedBox(
+                  width: 8.0,
+                ),
+                Container(
+                    padding:
+                        EdgeInsets.symmetric(horizontal: 6.0, vertical: 2.5),
+                    decoration: BoxDecoration(
+                        color: Theme.of(context).accentColor,
+                        border: Border.all(
+                            color: Theme.of(context).accentColor,
+                            width: 1.0,
+                            style: BorderStyle.solid),
+                        borderRadius: BorderRadius.circular(8.0)),
+                    child: Text(
+                      '\$ ' + '${_products[index]['price'].toString()}',
+                      style: TextStyle(color: Colors.white),
+                    ))
               ],
-            )
-          ],
-        ),
-      ),
+            )),
+        Text('Union Square San Francisco'),
+        ButtonBar(alignment: MainAxisAlignment.center, children: <Widget>[
+          FlatButton(
+            child: Text('Details'),
+            onPressed: () => Navigator.pushNamed<bool>(
+                // bool from product.dart suggests that a the delete button was clicked.
+                context,
+                '/product/' + index.toString()),
+          )
+        ]),
+      ]),
     );
   }
 

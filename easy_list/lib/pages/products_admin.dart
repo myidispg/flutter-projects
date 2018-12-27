@@ -1,10 +1,15 @@
 import 'package:flutter/material.dart';
 
-import 'products_home.dart';
 import 'product_create.dart';
 import 'product_list.dart';
 
-class ManageProductPage extends StatelessWidget {
+class ProductsAdminPage extends StatelessWidget {
+
+  final Function addProduct;
+  final Function deleteProduct;
+
+  ProductsAdminPage(this.addProduct, this.deleteProduct);
+
   @override
   Widget build(BuildContext context) {
     return DefaultTabController(
@@ -42,7 +47,7 @@ class ManageProductPage extends StatelessWidget {
             body: TabBarView(children: <Widget>[
               // TabBarView is the view for each tab. The amount of pages must be equal to number of tabs.
               // We already have a scaffold as a super widget of this page. No need in sub pages.
-              ProductCreatePage(),
+              ProductCreatePage(addProduct),
               ProductListPage(),
             ])));
   }

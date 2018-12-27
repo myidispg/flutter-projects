@@ -18,9 +18,9 @@ class MyApp extends StatefulWidget {
 }
 
 class _MyAppState extends State<MyApp> {
-  List<Map<String, String>> _products = [];
+  List<Map<String, dynamic>> _products = [];
 
-  void _addProduct(Map<String, String> product) {
+  void _addProduct(Map<String, dynamic> product) {
     // A map is used to hold multiple values. A product can have price, title etc.
     // Set state is a part of StatefulWidget class. Hence, it cannot be used in StatelessWidget.
     setState(() {
@@ -47,9 +47,9 @@ class _MyAppState extends State<MyApp> {
       ),
 //      home: AuthPage(),
       routes: {
-        '/': (BuildContext context) => ProductsPage(_products, _addProduct,
-            _deleteProduct), // There can either be this '/' or 'home' argument above. Not both.
-        'admin': (BuildContext context) => ManageProductPage(),
+        '/': (BuildContext context) => ProductsPage(_products), // There can either be this '/' or 'home' argument above. Not both.
+        'admin': (BuildContext context) => ProductsAdminPage( _addProduct,
+            _deleteProduct),
       },
       // onGenerateRoute is explained in Navigation, Video 17
       onGenerateRoute: (RouteSettings settings) {
@@ -67,7 +67,7 @@ class _MyAppState extends State<MyApp> {
       // runs when there is no know route
       onUnknownRoute: (RouteSettings settings){
         return MaterialPageRoute(
-            builder: (BuildContext context) => ProductsPage(_products, _addProduct,_deleteProduct));
+            builder: (BuildContext context) => ProductsPage(_products));
       },
     );
   }

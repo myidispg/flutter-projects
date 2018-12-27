@@ -1,14 +1,11 @@
 import 'package:flutter/material.dart';
 
 import 'products.dart';
-import 'product_control.dart';
 
 class ProductManager extends StatelessWidget {
-  final List<Map<String, String>> _products;
-  final Function _addProduct;
-  final Function _deleteProduct;
+  final List<Map<String, dynamic>> _products;
 
-  ProductManager(this._products, this._addProduct, this._deleteProduct);
+  ProductManager(this._products);
 
 //  // Method to call when this ProductManager is called for the first time. Subsequent state changes are ignored.
 //  @override
@@ -39,12 +36,8 @@ class ProductManager extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Column(children: [
-      Container(
-          margin: EdgeInsets.all(10.0), child: ProductControl(_addProduct)),
       Expanded(
-          child: Products(_products,
-              deleteProduct:
-                  _deleteProduct)) // Expanded takes all the available space on viewport.
+          child: Products(_products)) // Expanded takes all the available space on viewport.
     ]);
   }
 }
