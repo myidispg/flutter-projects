@@ -37,14 +37,20 @@ class Products extends StatelessWidget {
                             color: Theme.of(context).accentColor,
                             width: 1.0,
                             style: BorderStyle.solid),
-                        borderRadius: BorderRadius.circular(8.0)),
+                        borderRadius: BorderRadius.circular(6.0)),
                     child: Text(
                       '\$ ' + '${_products[index]['price'].toString()}',
                       style: TextStyle(color: Colors.white),
                     ))
               ],
             )),
-        Text('Union Square San Francisco'),
+        DecoratedBox(
+            decoration: BoxDecoration(
+                border: Border.all(color: Colors.grey, width: 1.0),
+                borderRadius: BorderRadius.circular(4.0)),
+            child: Padding(
+                padding: EdgeInsets.symmetric(horizontal: 6.0, vertical: 2.5),
+                child: Text('Union Square San Francisco'))),
         ButtonBar(alignment: MainAxisAlignment.center, children: <Widget>[
           FlatButton(
             child: Text('Details'),
