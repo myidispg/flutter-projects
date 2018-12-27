@@ -1,3 +1,4 @@
+import 'package:easy_list/pages/auth.dart';
 import 'package:easy_list/pages/product.dart';
 import 'package:easy_list/pages/products_admin.dart';
 import 'package:easy_list/pages/products_home.dart';
@@ -12,7 +13,6 @@ main() {
 class MyApp extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
-    // TODO: implement createState
     return _MyAppState();
   }
 }
@@ -47,9 +47,11 @@ class _MyAppState extends State<MyApp> {
       ),
 //      home: AuthPage(),
       routes: {
-        '/': (BuildContext context) => ProductsPage(_products), // There can either be this '/' or 'home' argument above. Not both.
-        'admin': (BuildContext context) => ProductsAdminPage( _addProduct,
-            _deleteProduct),
+        '/': (BuildContext context) => AuthPage(),
+        '/products': (BuildContext context) => ProductsPage(
+            _products), // There can either be this '/' or 'home' argument above. Not both.
+        'admin': (BuildContext context) =>
+            ProductsAdminPage(_addProduct, _deleteProduct),
       },
       // onGenerateRoute is explained in Navigation, Video 17
       onGenerateRoute: (RouteSettings settings) {
@@ -65,7 +67,7 @@ class _MyAppState extends State<MyApp> {
         return null;
       },
       // runs when there is no know route
-      onUnknownRoute: (RouteSettings settings){
+      onUnknownRoute: (RouteSettings settings) {
         return MaterialPageRoute(
             builder: (BuildContext context) => ProductsPage(_products));
       },

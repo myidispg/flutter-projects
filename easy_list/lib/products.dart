@@ -52,10 +52,19 @@ class Products extends StatelessWidget {
                 padding: EdgeInsets.symmetric(horizontal: 6.0, vertical: 2.5),
                 child: Text('Union Square San Francisco'))),
         ButtonBar(alignment: MainAxisAlignment.center, children: <Widget>[
-          FlatButton(
-            child: Text('Details'),
+          IconButton(
+            icon: Icon(Icons.info),
+            color: Theme.of(context).accentColor,
             onPressed: () => Navigator.pushNamed<bool>(
                 // bool from product.dart suggests that a the delete button was clicked.
+                context,
+                '/product/' + index.toString()),
+          ),
+          IconButton(
+            icon: Icon(Icons.favorite_border),
+            color: Colors.red,
+            onPressed: () => Navigator.pushNamed<bool>(
+              // bool from product.dart suggests that a the delete button was clicked.
                 context,
                 '/product/' + index.toString()),
           )

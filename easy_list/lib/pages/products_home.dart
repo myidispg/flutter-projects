@@ -19,6 +19,7 @@ class ProductsPage extends StatelessWidget {
               title: Text('Choose a page.'),
             ),
             ListTile(
+              leading: Icon(Icons.edit),
               title: Text('Manage Products'),
               onTap: () {
                 Navigator.pushReplacementNamed(
@@ -30,6 +31,12 @@ class ProductsPage extends StatelessWidget {
       ),
       appBar: AppBar(
         title: Text("Easy List"),
+        // Actions are buttons after title.
+        actions: <Widget>[
+          IconButton(icon:
+          Icon(Icons.favorite),
+          onPressed: (){},)
+        ],
       ),
       body: ProductManager(/* startingProduct : 'Food Tester' */ products),
     );

@@ -76,7 +76,7 @@ class _AuthPageState extends State<AuthPage> {
                       Navigator.pushReplacementNamed(
                           // Push replacement means that once navigated to the next page, the previous page will be removed from stack.
                           context,
-                          '/');
+                          '/products');
                     },
                     child: Text('Login'),
                   ),
