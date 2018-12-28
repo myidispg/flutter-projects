@@ -1,17 +1,19 @@
 import 'package:flutter/material.dart';
 
-class ProductCreatePage extends StatefulWidget {
+class ProductEditPage extends StatefulWidget {
   final Function addProduct;
+  final Function updateProduct;
+  final Map<String, dynamic> product;
 
-  ProductCreatePage(this.addProduct);
+  ProductEditPage({this.addProduct, this.updateProduct, this.product});
 
   @override
   State<StatefulWidget> createState() {
-    return _ProductCreatePageState();
+    return _ProductEditPageState();
   }
 }
 
-class _ProductCreatePageState extends State<ProductCreatePage> {
+class _ProductEditPageState extends State<ProductEditPage> {
   final Map<String, dynamic> _formData = {
     'title': null,
     'description': null,
@@ -23,6 +25,7 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
 
   Widget _buildTitleTextField() {
     return TextFormField(
+      initialValue: widget.product == null ? '' : widget.product['title'],
       decoration: InputDecoration(labelText: 'Product Title'),
 //      autovalidate: true, // autovalidate shows error even when user has no chance to edit the form. Do validation is by GlobalKey.
       validator: (String value) {
@@ -31,7 +34,7 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
           return 'Title is required and should be 5+ characters long.';
       },
       onSaved: (String value) {
-          _formData['title'] = value;
+        _formData['title'] = value;
       },
     );
   }
@@ -39,6 +42,7 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
   Widget _buildDescriptionTextField() {
     return TextFormField(
       maxLines: 4,
+      initialValue: widget.product == null ? '' : widget.product['description'],
       decoration: InputDecoration(labelText: 'Product Description'),
       validator: (String value) {
         if (value.isEmpty || value.length < 10) {
@@ -46,13 +50,17 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
         }
       },
       onSaved: (String value) {
-          _formData['description'] = value;
+        _formData['description'] = value;
       },
     );
   }
 
   Widget _buildPriceTextField() {
     return TextFormField(
+      initialValue: widget.product == null
+          ? ''
+          : widget.product['price']
+              .toString(), // to show an initial value if present.
       keyboardType: TextInputType.number,
       decoration: InputDecoration(labelText: 'Product Price'),
       validator: (String value) {
@@ -62,7 +70,7 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
         }
       },
       onSaved: (String value) {
-          _formData['price'] = double.parse(value);
+        _formData['price'] = double.parse(value);
       },
     );
   }
@@ -82,7 +90,7 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
     final double deviceWidth = MediaQuery.of(context).size.width;
     final double targetWidth = deviceWidth > 550.0 ? 500.0 : deviceWidth * 0.95;
     final double targetPadding = deviceWidth - targetWidth;
-    return GestureDetector(
+    final Widget pageContent = GestureDetector(
         onTap: () {
           FocusScope.of(context).requestFocus(
               FocusNode()); // For closing the keyboard when text fields are not tapped.
@@ -117,5 +125,11 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
             ),
           ),
         ));
+    return widget.product == null
+        ? pageContent
+        : Scaffold(
+            appBar: AppBar(title: Text('Edit product')),
+            body: pageContent,
+          );
   }
 }
