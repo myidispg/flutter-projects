@@ -12,9 +12,13 @@ class ProductCreatePage extends StatefulWidget {
 }
 
 class _ProductCreatePageState extends State<ProductCreatePage> {
-  String _titleValue;
-  String _descriptionValue;
-  double _priceValue;
+  final Map<String, dynamic> _formData = {
+    'title': null,
+    'description': null,
+    'price': null,
+    'image': 'assets/food.jpg'
+  };
+
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
 
   Widget _buildTitleTextField() {
@@ -27,9 +31,7 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
           return 'Title is required and should be 5+ characters long.';
       },
       onSaved: (String value) {
-        setState(() {
-          _titleValue = value;
-        });
+          _formData['title'] = value;
       },
     );
   }
@@ -44,9 +46,7 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
         }
       },
       onSaved: (String value) {
-        setState(() {
-          _descriptionValue = value;
-        });
+          _formData['description'] = value;
       },
     );
   }
@@ -55,16 +55,14 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
     return TextFormField(
       keyboardType: TextInputType.number,
       decoration: InputDecoration(labelText: 'Product Price'),
-      validator: (String value){
+      validator: (String value) {
         if (value.isEmpty ||
             !RegExp(r'^(?:[1-9]\d*|0)?(?:\.\d+)?$').hasMatch(value)) {
           return 'Price is required and should be a number.';
         }
       },
       onSaved: (String value) {
-        setState(() {
-          _priceValue = double.parse(value);
-        });
+          _formData['price'] = double.parse(value);
       },
     );
   }
@@ -75,13 +73,7 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
     }
     _formKey.currentState
         .save(); // the onSaved of all the text fields will be executed now.
-    final Map<String, dynamic> product = {
-      'title': _titleValue,
-      'description': _descriptionValue,
-      'price': _priceValue,
-      'image': 'assets/food.jpg'
-    };
-    widget.addProduct(product);
+    widget.addProduct(_formData);
     Navigator.pushReplacementNamed(context, '/products');
   }
 
@@ -91,38 +83,39 @@ class _ProductCreatePageState extends State<ProductCreatePage> {
     final double targetWidth = deviceWidth > 550.0 ? 500.0 : deviceWidth * 0.95;
     final double targetPadding = deviceWidth - targetWidth;
     return GestureDetector(
-      onTap: (){
-        FocusScope.of(context).requestFocus(FocusNode());
-      },
+        onTap: () {
+          FocusScope.of(context).requestFocus(
+              FocusNode()); // For closing the keyboard when text fields are not tapped.
+        },
         child: Container(
-      margin: EdgeInsets.all(10.0),
-      child: Form(
-        key: _formKey,
-        child: ListView(
-          padding: EdgeInsets.symmetric(horizontal: targetPadding / 2),
-          children: <Widget>[
-            _buildTitleTextField(),
-            _buildDescriptionTextField(),
-            _buildPriceTextField(),
-            SizedBox(
-              height: 10.0,
+          margin: EdgeInsets.all(10.0),
+          child: Form(
+            key: _formKey,
+            child: ListView(
+              padding: EdgeInsets.symmetric(horizontal: targetPadding / 2),
+              children: <Widget>[
+                _buildTitleTextField(),
+                _buildDescriptionTextField(),
+                _buildPriceTextField(),
+                SizedBox(
+                  height: 10.0,
+                ),
+                RaisedButton(
+                  child: Text('Save'),
+                  textColor: Colors.white,
+                  onPressed: _submitForm,
+                )
+                // GestureDetector(
+                //   onTap: _submitForm,
+                //   child: Container(
+                //     color: Colors.green,
+                //     padding: EdgeInsets.all(5.0),
+                //     child: Text('My Button'),
+                //   ),
+                // )
+              ],
             ),
-            RaisedButton(
-              child: Text('Save'),
-              textColor: Colors.white,
-              onPressed: _submitForm,
-            )
-            // GestureDetector(
-            //   onTap: _submitForm,
-            //   child: Container(
-            //     color: Colors.green,
-            //     padding: EdgeInsets.all(5.0),
-            //     child: Text('My Button'),
-            //   ),
-            // )
-          ],
-        ),
-      ),
-    ));
+          ),
+        ));
   }
 }
