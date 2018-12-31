@@ -1,5 +1,7 @@
 import 'package:easy_list/models/product.dart';
+import 'package:easy_list/scoped_models/products.dart';
 import 'package:flutter/material.dart';
+import 'package:scoped_model/scoped_model.dart';
 
 import './product_edit.dart';
 
@@ -11,19 +13,24 @@ class ProductListPage extends StatelessWidget {
   ProductListPage(this.products, this.updateProduct, this.deleteProduct);
 
   Widget _buildEditButton(BuildContext context, int index) {
-    return IconButton(
-      icon: Icon(Icons.edit),
-      onPressed: () {
-        Navigator.of(context).push(
-          MaterialPageRoute(
-            builder: (BuildContext context) {
-              return ProductEditPage(
-                product: products[index],
-                updateProduct: updateProduct,
-                productIndex: index,
-              );
-            },
-          ),
+    return ScopedModelDescendant<ProductsModel>(
+      builder: (BuildContext context, Widget child, ProductsModel model) {
+        return IconButton(
+          icon: Icon(Icons.edit),
+          onPressed: () {
+            model.selectProduct(index);
+            Navigator.of(context).push(
+              MaterialPageRoute(
+                builder: (BuildContext context) {
+                  return ProductEditPage(
+                    product: products[index],
+                    updateProduct: updateProduct,
+                    productIndex: index,
+                  );
+                },
+              ),
+            );
+          },
         );
       },
     );

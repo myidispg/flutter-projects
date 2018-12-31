@@ -4,6 +4,7 @@ import '../models/product.dart';
 
 class ProductsModel extends Model {
   List<Product> _products = [];
+  int _selectedProductIndex;
 
   List<Product> get products {
     return List.from((_products)); // Return a copy of the list. Pass by value.
@@ -13,11 +14,15 @@ class ProductsModel extends Model {
     _products.add(product);
   }
 
-  void updateProduct(int index, Product product) {
-    _products[index] = product;
+  void updateProduct(Product product) {
+    _products[_selectedProductIndex] = product;
   }
 
-  void deleteProduct(int index) {
-    _products.removeAt(index);
+  void deleteProduct() {
+    _products.removeAt(_selectedProductIndex);
+  }
+  // Function to set the index of the product we want to edit or delete.
+  void selectProduct(int index){
+    _selectedProductIndex = index;
   }
 }
