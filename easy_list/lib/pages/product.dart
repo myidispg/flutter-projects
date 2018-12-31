@@ -1,14 +1,14 @@
 import 'dart:async';
 
-import 'package:easy_list/models/product.dart';
-import 'package:easy_list/scoped_models/products.dart';
 import 'package:flutter/material.dart';
+
 import 'package:scoped_model/scoped_model.dart';
 
 import '../widgets/ui_elements/title_default.dart';
+import '../models/product.dart';
+import '../scoped-models/main.dart';
 
 class ProductPage extends StatelessWidget {
-
   final int productIndex;
 
   ProductPage(this.productIndex);
@@ -38,14 +38,13 @@ class ProductPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return WillPopScope(
-      onWillPop: () {
-        print('Back button pressed!');
-        Navigator.pop(context, false);
-        return Future.value(false);
-      },
-      child: ScopedModelDescendant<ProductsModel>(builder: (BuildContext context, Widget child, ProductsModel model){
-        final Product product = model.products[productIndex];
+    return WillPopScope(onWillPop: () {
+      print('Back button pressed!');
+      Navigator.pop(context, false);
+      return Future.value(false);
+    }, child: ScopedModelDescendant<MainModel>(
+      builder: (BuildContext context, Widget child, MainModel model) {
+        final Product product = model.allProducts[productIndex];
         return Scaffold(
           appBar: AppBar(
             title: Text(product.title),
@@ -69,7 +68,7 @@ class ProductPage extends StatelessWidget {
             ],
           ),
         );
-      },),
-    );
+      },
+    ));
   }
 }
