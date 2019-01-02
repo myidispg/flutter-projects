@@ -3,6 +3,7 @@ import 'dart:async';
 
 import 'package:scoped_model/scoped_model.dart';
 import 'package:http/http.dart' as http;
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../models/product.dart';
 import '../models/user.dart';
@@ -69,7 +70,7 @@ class ProductsModel extends ConnectedProductsModel {
     };
     try {
       final http.Response response = await http.post(
-          'https://flutter-easy-list-25e01.firebaseio.com/prpducts.json',
+          'https://flutter-easy-list-25e01.firebaseio.com/prpducts.json?auth=${_authenticatedUser.token}',
           body: json.encode(productData));
 
       if (response.statusCode != 200 && response.statusCode != 201) {
@@ -117,7 +118,7 @@ class ProductsModel extends ConnectedProductsModel {
     };
     return http
         .put(
-            'https://flutter-easy-list-25e01.firebaseio.com/products/${selectedProduct.id}.json',
+            'https://flutter-easy-list-25e01.firebaseio.com/products/${selectedProduct.id}.json?auth=${_authenticatedUser.token}',
             body: json.encode(updateData))
         .then((http.Response reponse) {
       _isLoading = false;
@@ -147,7 +148,7 @@ class ProductsModel extends ConnectedProductsModel {
     notifyListeners();
     return http
         .delete(
-            'https://flutter-easy-list-25e01.firebaseio.com/products/${deletedProductId}.json')
+            'https://flutter-easy-list-25e01.firebaseio.com/products/${deletedProductId}.json?auth=${_authenticatedUser.token}')
         .then((http.Response response) {
       _isLoading = false;
       notifyListeners();
@@ -163,7 +164,8 @@ class ProductsModel extends ConnectedProductsModel {
     _isLoading = true;
     notifyListeners();
     return http
-        .get('https://flutter-easy-list-25e01.firebaseio.com/products.json')
+        .get(
+            'https://flutter-easy-list-25e01.firebaseio.com/products.json?auth=${_authenticatedUser.token}')
         .then<Null>((http.Response response) {
       final List<Product> fetchedProductList = [];
       final Map<String, dynamic> productListData = json.decode(response.body);
@@ -222,6 +224,13 @@ class ProductsModel extends ConnectedProductsModel {
 }
 
 class UserModel extends ConnectedProductsModel {
+
+  Timer _authTimer;
+
+  User get user {
+    return _authenticatedUser;
+  }
+
   Future<Map<String, dynamic>> authenticate(String email, String password,
       [AuthMode mode = AuthMode.Login]) async {
     _isLoading = true;
@@ -252,6 +261,18 @@ class UserModel extends ConnectedProductsModel {
     if (responseData.containsKey('idToken')) {
       hasError = false;
       message = 'Authentication succeeded!';
+      _authenticatedUser = User(
+          id: responseData['localId'],
+          email: email,
+          token: responseData['idToken']);
+      setAuthTimeOut(int.parse(responseData['expiresIn']));
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      prefs.setString('token', responseData['idToken']);
+      prefs.setString('userEmail', email);
+      prefs.setString('userId', responseData['localId']);
+      final DateTime now = DateTime.now();
+      final DateTime expiryTime = now.add(Duration(seconds: int.parse(responseData['expiresIn'])));
+      prefs.setString('expiryTime', expiryTime.toIso8601String());
     } else if (responseData['error']['message'] == 'EMAIL_NOT_FOUND') {
       message = 'This email was not found.';
     } else if (responseData['error']['message'] == 'INVALID_PASSWORD') {
@@ -262,6 +283,42 @@ class UserModel extends ConnectedProductsModel {
     _isLoading = false;
     notifyListeners();
     return {'success': !hasError, 'message': message};
+  }
+
+  void autoAuthenticate() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final String token = prefs.get('token');
+    final String expiryTimeString = prefs.get('expiryTime');
+    if (token != null) {
+      final DateTime now = DateTime.now();
+      final parsedExpiryTime = DateTime.parse(expiryTimeString);
+      if(parsedExpiryTime.isBefore(now)){
+        _authenticatedUser = null;
+        notifyListeners();
+        return ;
+      }
+      final String userEmail = prefs.get('userEmail');
+      final String userId = prefs.get('userId');
+      final tokenLifeSpan = parsedExpiryTime.difference(now).inSeconds;
+      _authenticatedUser = User(id: userId, email: userEmail, token: token);
+      setAuthTimeOut(tokenLifeSpan);
+      notifyListeners();
+    }
+  }
+
+  void logout() async {
+    _authenticatedUser = null;
+    _authTimer.cancel();
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    prefs.remove('token');
+    prefs.remove('userEmail');
+    prefs.remove('userId');
+  }
+
+  void setAuthTimeOut(int time) {
+    _authTimer = Timer(Duration(milliseconds: time), () {
+      logout();
+    });
   }
 }
 
