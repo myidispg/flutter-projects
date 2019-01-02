@@ -41,7 +41,6 @@ class _MyAppState extends State<MyApp> {
 
   @override
   Widget build(BuildContext context) {
-    print('building main page');
     return ScopedModel<MainModel>(
       model: _model,
       child: MaterialApp(
@@ -54,9 +53,11 @@ class _MyAppState extends State<MyApp> {
         // home: AuthPage(),
         routes: {
           '/': (BuildContext context) =>
-              !_isAuthenticated ? AuthPage() : ProductsPage(_model),
-          '/admin': (BuildContext context) =>
-              !_isAuthenticated ? AuthPage() : ProductsAdminPage(_model),
+              _isAuthenticated == false ? AuthPage() : ProductsPage(_model),
+//          '/products': (BuildContext context) => ProductsPage(_model),
+          '/admin': (BuildContext context) => _isAuthenticated == false
+              ? AuthPage()
+              : ProductsAdminPage(_model),
         },
         onGenerateRoute: (RouteSettings settings) {
           if (!_isAuthenticated) {
@@ -76,15 +77,16 @@ class _MyAppState extends State<MyApp> {
             });
             return MaterialPageRoute<bool>(
               builder: (BuildContext context) =>
-                  !_isAuthenticated ? AuthPage() : ProductPage(product),
+                  _isAuthenticated == false ? AuthPage() : ProductPage(product),
             );
           }
           return null;
         },
         onUnknownRoute: (RouteSettings settings) {
           return MaterialPageRoute(
-              builder: (BuildContext context) =>
-                  !_isAuthenticated ? AuthPage() : ProductsPage(_model));
+              builder: (BuildContext context) => _isAuthenticated == false
+                  ? AuthPage()
+                  : ProductsPage(_model));
         },
       ),
     );

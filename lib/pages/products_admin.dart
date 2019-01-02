@@ -1,8 +1,8 @@
+import 'package:easy_list/widgets/ui_elements/logout_list_tile.dart';
 import 'package:flutter/material.dart';
 
 import './product_edit.dart';
 import './product_list.dart';
-import '../widgets/ui_elements/logout_list_tile.dart';
 import '../scoped-models/main.dart';
 
 class ProductsAdminPage extends StatelessWidget {

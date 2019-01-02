@@ -91,16 +91,16 @@ class _AuthPageState extends State<AuthPage> {
     );
   }
 
-  void _submitForm(Function authenticate) async {
+  void _submitForm(Function login) async {
     if (!_formKey.currentState.validate() || !_formData['acceptTerms']) {
       return;
     }
     _formKey.currentState.save();
     Map<String, dynamic> successInformation;
-    successInformation = await authenticate(
-        _formData['email'], _formData['password'], _authMode);
+      successInformation =
+          await login(_formData['email'], _formData['password'], _authMode);
     if (successInformation['success']) {
-      // Navigator.pushReplacementNamed(context, '/');
+//      Navigator.pushReplacementNamed(context, '/');
     } else {
       showDialog(
         context: context,
@@ -151,7 +151,7 @@ class _AuthPageState extends State<AuthPage> {
                     SizedBox(
                       height: 10.0,
                     ),
-                    _authMode == AuthMode.Signup
+                    _authMode == AuthMode.SignUp
                         ? _buildPasswordConfirmTextField()
                         : Container(),
                     _buildAcceptSwitch(),
@@ -164,7 +164,7 @@ class _AuthPageState extends State<AuthPage> {
                       onPressed: () {
                         setState(() {
                           _authMode = _authMode == AuthMode.Login
-                              ? AuthMode.Signup
+                              ? AuthMode.SignUp
                               : AuthMode.Login;
                         });
                       },
