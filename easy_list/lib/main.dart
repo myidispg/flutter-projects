@@ -9,6 +9,8 @@ import './pages/products.dart';
 import './pages/product.dart';
 import './scoped-models/main.dart';
 import './models/product.dart';
+import 'package:map_view/map_view.dart';
+
 
 void main() {
   // debugPaintSizeEnabled = true;
@@ -20,6 +22,7 @@ void main() {
 class MyApp extends StatefulWidget {
   @override
   State<StatefulWidget> createState() {
+    MapView.setApiKey('AIzaSyA2HVj6PVKnhLWFNXF9VvWzmBN54vPDOHg');
     return _MyAppState();
   }
 }
